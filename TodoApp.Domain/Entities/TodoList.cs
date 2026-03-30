@@ -1,0 +1,2 @@
+﻿namespace TodoApp.Domain.Entities {
+}
