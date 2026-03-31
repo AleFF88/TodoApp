@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37012.4 d17.14
+VisualStudioVersion = 17.14.37012.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Domain", "TodoApp.Domain\TodoApp.Domain.csproj", "{D0410D5C-FD1C-4ABA-921B-94AAEBA9D3CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Application", "TodoApp.Application\TodoApp.Application.csproj", "{37C6AD36-3053-451A-9793-1B0D142D236F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D0410D5C-FD1C-4ABA-921B-94AAEBA9D3CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0410D5C-FD1C-4ABA-921B-94AAEBA9D3CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0410D5C-FD1C-4ABA-921B-94AAEBA9D3CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C6AD36-3053-451A-9793-1B0D142D236F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C6AD36-3053-451A-9793-1B0D142D236F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C6AD36-3053-451A-9793-1B0D142D236F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C6AD36-3053-451A-9793-1B0D142D236F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
