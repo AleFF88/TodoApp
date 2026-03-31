@@ -1,4 +1,5 @@
-﻿using TodoApp.Domain.Entities;
+﻿using System.Collections.Generic;
+using TodoApp.Domain.Entities;
 using TodoApp.Domain.Repositories;
 
 namespace TodoApp.Application.Services {
@@ -13,9 +14,28 @@ namespace TodoApp.Application.Services {
         public async Task<Guid> CreateListAsync(string title, Guid ownerId) {
             var id = Guid.NewGuid();
             var todoList = new TodoList(id, title, ownerId);
-
             await _repository.AddAsync(todoList);
             return id;
+        }
+
+
+        // Удаление списка
+        public async Task DeleteListAsync(Guid listId, Guid currentUserId) {
+            var todoList = await GetListOrThrowAsync(listId);
+            
+            if (todoList.OwnerId != currentUserId) {
+                throw new UnauthorizedAccessException("Only the owner can delete the list.");
+            }
+
+            await _repository.DeleteAsync(todoList.Id);
+        }
+
+        private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
+            var todoList = await _repository.GetByIdAsync(listId);
+            if (todoList == null) {
+                throw new KeyNotFoundException($"TodoList {listId} not found.");
+            }
+            return todoList;
         }
     }
 }
