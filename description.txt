@@ -64,9 +64,24 @@
 
 ----------------------------------------------------------------------------------------------------
 Application Layer (Logic)
-Слой бизнес-логики, который координирует работу сущностей и репозиториев.
+Слой бизнес-логики, который координирует работу сущностей и репозиториев. Этот слой не знает ничего о MongoDB. Он знает только об интерфейсах из Domain и о том, какие данные хочет получить пользователь.
+Service — это «оркестратор». Он не умеет сам писать в базу и не должен содержать в себе правила валидации (они в сущностях). Его работа — выстроить цепочку действий для выполнения конкретного бизнес-сценария.
 
-Создаем проект TodoApp.Application
-Этот слой не знает ничего о MongoDB. Он знает только об интерфейсах из Domain и о том, какие данные хочет получить пользователь.
+Следующие шаги:
+1. Создаем проект TodoApp.Application (Class Library) и добавляем ссылку на TodoApp.Domain.
+2. Создаем TodoListBriefDto.	TodoApp.Application/DTOs/TodoListBriefDto.cs
+	В ТЗ сказано: при получении списка достаточно ID и Названия. Создадим для этого легкую модель только с этими полями. 
+3. Создаем TodoListService.		TodoApp.Application/Services/TodoListService.cs
+	Этот сервис будет связывать воедино сущности из Domain и репозиторий. Он будет имплементировать описанную в ТЗ бизнеслогику с использованием методов из ITodoListRepository.
+Имплементируем следущие методы:
+	Метод сервиса		Что делает внутри 	Логика
+		Работа со списком задач
+	CreateListAsync 		Создает 			new TodoList(...) -> repo.AddAsync()
+	UpdateListTitleAsync	Вносит изменения	repo.GetById() -> list.UpdateTitle() -> repo.UpdateAsync()
+	DeleteListAsync			Удаляет 			Проверка прав -> repo.DeleteAsync()
+	GetBriefListsAsync		Получить список		repo.GetPagedAsync() -> Маппинг в TodoListBriefDto
+		Работа со связями списка задач с пользователями
+	AddUserLinkAsync		Дать доступ 		repo.GetById() -> list.AddSharedUser() -> repo.UpdateAsync()
+	RemoveUserLinkAsync		Убрать доступ 		repo.GetById() -> list.RemoveSharedUser() -> repo.UpdateAsync()
+	GetSharedUsersAsync		Список доступа 		repo.GetById() -> Возврат list.SharedUserIds
 
-В ТЗ сказано: при получении списка достаточно ID и Названия. Создадим для этого легкую модель только с этими полями. TodoApp.Application/DTOs/TodoListBriefDto.cs
