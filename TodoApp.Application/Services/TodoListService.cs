@@ -64,6 +64,18 @@ namespace TodoApp.Application.Services {
             await _repository.UpdateAsync(todoList);
         }
 
+        // Удаление связи пользователя с списком (для совместного доступа)
+        public async Task RemoveUserLinkAsync(Guid listId, Guid currentUserId, Guid targetUserId) {
+            var todoList = await GetListOrThrowAsync(listId);
+
+            if (todoList.OwnerId != currentUserId && !todoList.SharedUserIds.Contains(currentUserId)) {
+                throw new UnauthorizedAccessException("Access denied.");
+            }
+
+            todoList.RemoveSharedUser(targetUserId);
+            await _repository.UpdateAsync(todoList);
+        }
+
         private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
             var todoList = await _repository.GetByIdAsync(listId);
             if (todoList == null) {
