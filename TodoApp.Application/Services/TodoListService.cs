@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using TodoApp.Application.DTOs;
 using TodoApp.Domain.Entities;
 using TodoApp.Domain.Repositories;
 
@@ -40,6 +40,16 @@ namespace TodoApp.Application.Services {
 
             todoList.UpdateTitle(newTitle);
             await _repository.UpdateAsync(todoList);
+        }
+
+        // Получение перечня всех списков пользователя
+        public async Task<IEnumerable<TodoListBriefDto>> GetBriefListsAsync(Guid currentUserId, int page, int pageSize) { 
+            var todoLists = await _repository.GetPagedAsync(currentUserId, page, pageSize);
+
+            // Делаем маппинг из доменной сущности в DTO для передачи клиенту.
+            // Как я писал в описании, тут я получил полную сущность, но беру только необходимое.
+            //   Если потом мне понадобятся другие поля, я просто добавлю их в DTO и допишу маппинг здесь.
+            return todoLists.Select(l => new TodoListBriefDto(l.Id, l.Title));
         }
 
         private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
