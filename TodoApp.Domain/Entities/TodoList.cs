@@ -28,7 +28,12 @@
             _sharedUserIds.Remove(userId);
         }
 
-        private void ValidateTitle(string title) {
+        public void UpdateTitle(string newTitle) {
+            ValidateTitle(newTitle);
+            Title = newTitle;
+        }
+
+        private static void ValidateTitle(string title) {
             if (string.IsNullOrWhiteSpace(title) || title.Length > 255) {
                 throw new ArgumentException("Title must be between 1 and 255 characters.");
             }

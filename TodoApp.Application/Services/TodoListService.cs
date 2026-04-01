@@ -30,6 +30,18 @@ namespace TodoApp.Application.Services {
             await _repository.DeleteAsync(todoList.Id);
         }
 
+        // Редактирование название списка
+        public async Task UpdateListTitleAsync(Guid listId, string newTitle, Guid currentUserId) {
+            var todoList = await GetListOrThrowAsync(listId);
+
+            if (todoList.OwnerId != currentUserId && !todoList.SharedUserIds.Contains(currentUserId)) {
+                throw new UnauthorizedAccessException("You don't have permission to edit this list.");
+            }
+
+            todoList.UpdateTitle(newTitle);
+            await _repository.UpdateAsync(todoList);
+        }
+
         private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
             var todoList = await _repository.GetByIdAsync(listId);
             if (todoList == null) {
