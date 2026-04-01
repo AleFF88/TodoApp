@@ -54,26 +54,23 @@ namespace TodoApp.Application.Services {
 
         // Добавление связи пользователя с списком (для совместного доступа)
         public async Task AddUserLinkAsync(Guid listId, Guid currentUserId, Guid targetUserId) {
-            var todoList = await GetListOrThrowAsync(listId);
-
-            if (todoList.OwnerId != currentUserId && !todoList.SharedUserIds.Contains(currentUserId)) {
-                throw new UnauthorizedAccessException("Access denied.");
-            }
-
+            var todoList = await EnsureAccessAsync(listId, currentUserId);
             todoList.AddSharedUser(targetUserId);
             await _repository.UpdateAsync(todoList);
         }
 
-        // Удаление связи пользователя с списком (для совместного доступа)
+        // Удаление связи пользователя со списком (для совместного доступа)
         public async Task RemoveUserLinkAsync(Guid listId, Guid currentUserId, Guid targetUserId) {
-            var todoList = await GetListOrThrowAsync(listId);
-
-            if (todoList.OwnerId != currentUserId && !todoList.SharedUserIds.Contains(currentUserId)) {
-                throw new UnauthorizedAccessException("Access denied.");
-            }
-
+            var todoList = await EnsureAccessAsync(listId, currentUserId);
             todoList.RemoveSharedUser(targetUserId);
             await _repository.UpdateAsync(todoList);
+        }
+
+        // Получение списка тех, у кого есть доступ
+        public async Task<IEnumerable<Guid>> GetSharedUsersAsync(Guid listId, Guid currentUserId) {
+            var todoList = await EnsureAccessAsync(listId, currentUserId);
+            // Пока возвращаем только список идентификаторов. 
+            return todoList.SharedUserIds;
         }
 
         private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
@@ -82,6 +79,17 @@ namespace TodoApp.Application.Services {
                 throw new KeyNotFoundException($"TodoList {listId} not found.");
             }
             return todoList;
+        }
+
+        private async Task<TodoList> EnsureAccessAsync(Guid listId, Guid userId) {
+            var list = await GetListOrThrowAsync(listId);
+            bool isOwner = list.OwnerId == userId;
+            bool isShared = list.SharedUserIds.Contains(userId);
+
+            if (!isOwner && !isShared) {
+                throw new UnauthorizedAccessException("Access denied.");
+            }
+            return list;
         }
     }
 }
