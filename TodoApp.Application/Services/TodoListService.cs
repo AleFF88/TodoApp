@@ -52,6 +52,18 @@ namespace TodoApp.Application.Services {
             return todoLists.Select(l => new TodoListBriefDto(l.Id, l.Title));
         }
 
+        // Добавление связи пользователя с списком (для совместного доступа)
+        public async Task AddUserLinkAsync(Guid listId, Guid currentUserId, Guid targetUserId) {
+            var todoList = await GetListOrThrowAsync(listId);
+
+            if (todoList.OwnerId != currentUserId && !todoList.SharedUserIds.Contains(currentUserId)) {
+                throw new UnauthorizedAccessException("Access denied.");
+            }
+
+            todoList.AddSharedUser(targetUserId);
+            await _repository.UpdateAsync(todoList);
+        }
+
         private async Task<TodoList> GetListOrThrowAsync(Guid listId) {
             var todoList = await _repository.GetByIdAsync(listId);
             if (todoList == null) {
