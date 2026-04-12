@@ -16,6 +16,17 @@
             CreatedAt = DateTime.UtcNow;    
         }
 
+        // ПРИВАТНЫЙ конструктор для восстановления из БД через MongoDB Driver.
+        //   см. использование в MongoDbMapping в cm.MapConstructor
+        private TodoList(Guid id, string title, Guid ownerId, DateTime createdAt, List<Guid> sharedUserIds) {
+            Id = id;
+            Title = title;
+            OwnerId = ownerId;
+            CreatedAt = createdAt;
+            _sharedUserIds = sharedUserIds ?? new List<Guid>();
+        }
+
+
         public IReadOnlyCollection<Guid> SharedUserIds => _sharedUserIds.AsReadOnly();
 
         public void AddSharedUser(Guid userId) {
