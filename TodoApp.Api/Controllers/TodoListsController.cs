@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoApp.Api.DTOs;
+using TodoApp.Application.DTOs;
 using TodoApp.Application.Services;
 
 namespace TodoApp.Api.Controllers {
@@ -23,5 +24,17 @@ namespace TodoApp.Api.Controllers {
             return Ok(listId);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TodoListBriefDto>> GetById(
+            Guid id,
+            [FromHeader(Name = "X-User-Id")] Guid userId) {
+
+            // Вызываем сервис бизнес-логики. 
+            // Если доступа нет или списка нет — он выбросит исключение.
+            var todoList = await _todoListService.GetListByIdAsync(id, userId);
+
+            // Маппим доменную сущность в ваш существующий TodoListBriefDto
+            return Ok(new TodoListBriefDto(todoList.Id, todoList.Title));
+        }
     }
 }

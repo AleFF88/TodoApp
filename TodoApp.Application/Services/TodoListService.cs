@@ -52,6 +52,12 @@ namespace TodoApp.Application.Services {
             return todoLists.Select(l => new TodoListBriefDto(l.Id, l.Title));
         }
 
+
+        // Получение конкретного списка по ID 
+        public async Task<TodoList> GetListByIdAsync(Guid listId, Guid currentUserId) {
+            return await EnsureAccessAsync(listId, currentUserId);
+        }
+
         // Добавление связи пользователя с списком (для совместного доступа)
         public async Task AddUserLinkAsync(Guid listId, Guid currentUserId, Guid targetUserId) {
             var todoList = await EnsureAccessAsync(listId, currentUserId);
