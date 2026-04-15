@@ -21,4 +21,10 @@ namespace TodoApp.Api.DTOs {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
     }
+
+    // Для добавления связи
+    public class ShareListRequest {
+        [Required]
+        public Guid TargetUserId { get; set; }
+    }
 }

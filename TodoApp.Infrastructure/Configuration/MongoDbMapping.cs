@@ -25,7 +25,9 @@ namespace TodoApp.Infrastructure.Configuration {
                 // Позволяет драйверу записать данные в _sharedUserIds,
                 //   не смотря на то, что это IReadOnlyCollection (не поддерживает запись).
                 cm.MapField("_sharedUserIds")       // Доступ к полю через рефлексию
-                  .SetElementName("SharedUserIds"); // Имя ключа в BSON документе (в БД)
+                  .SetElementName("SharedUserIds")  // Имя ключа в BSON документе (в БД)
+                .SetSerializer(new EnumerableInterfaceImplementerSerializer<List<Guid>, Guid>(
+                     new GuidSerializer(GuidRepresentation.Standard)));// Добавляем сериализатор для GUID элементов коллекции
 
                 // Регистрирует конструктора для десериализации
                 // Ищем конструктор с 5 параметрами (id, title, ownerId, createdAt, sharedUserIds)

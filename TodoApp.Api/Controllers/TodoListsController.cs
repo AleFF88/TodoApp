@@ -60,5 +60,31 @@ namespace TodoApp.Api.Controllers {
             // Возвращаем 204 No Content. Ресурс удален, передавать в теле ответа больше нечего.
             return NoContent();
         }
+
+        [HttpPost("{id}/shares")]
+        public async Task<IActionResult> AddShare(
+            Guid id,
+            [FromBody] ShareListRequest request,
+            [FromHeader(Name = "X-User-Id")] Guid userId) {
+            await _todoListService.AddUserLinkAsync(id, userId, request.TargetUserId);
+            return NoContent();
+        }
+
+        [HttpGet("{id}/shares")]
+        public async Task<ActionResult<IEnumerable<Guid>>> GetShares(
+            Guid id,
+            [FromHeader(Name = "X-User-Id")] Guid userId) {
+            var sharedUsers = await _todoListService.GetSharedUsersAsync(id, userId);
+            return Ok(sharedUsers);
+        }
+
+        [HttpDelete("{id}/shares/{targetUserId}")]
+        public async Task<IActionResult> RemoveShare(
+            Guid id,
+            Guid targetUserId,
+            [FromHeader(Name = "X-User-Id")] Guid userId) {
+            await _todoListService.RemoveUserLinkAsync(id, userId, targetUserId);
+            return NoContent();
+        }
     }
 }
