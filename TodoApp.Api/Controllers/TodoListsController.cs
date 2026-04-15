@@ -36,5 +36,29 @@ namespace TodoApp.Api.Controllers {
             // Маппим доменную сущность в ваш существующий TodoListBriefDto
             return Ok(new TodoListBriefDto(todoList.Id, todoList.Title));
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(
+            Guid id,
+            [FromBody] UpdateTodoListRequest request,
+            [FromHeader(Name = "X-User-Id")] Guid userId) {
+
+            await _todoListService.UpdateListTitleAsync(id, request.Title, userId);
+
+            // Возвращаем 204 No Content, так как при успешном обновлении 
+            // передавать дополнительные данные клиенту не требуется.
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(
+            Guid id,
+             [FromHeader(Name = "X-User-Id")] Guid userId) {
+
+            await _todoListService.DeleteListAsync(id, userId);
+
+            // Возвращаем 204 No Content. Ресурс удален, передавать в теле ответа больше нечего.
+            return NoContent();
+        }
     }
 }
