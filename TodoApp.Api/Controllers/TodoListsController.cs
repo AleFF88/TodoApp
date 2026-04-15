@@ -86,5 +86,21 @@ namespace TodoApp.Api.Controllers {
             await _todoListService.RemoveUserLinkAsync(id, userId, targetUserId);
             return NoContent();
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TodoListBriefDto>>> GetPaged(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromHeader(Name = "X-User-Id")] Guid userId = default) {
+
+            // Проверка корректности параметров пагинации
+            if (page < 1)
+                page = 1;
+            if (pageSize < 1 || pageSize > 100)
+                pageSize = 10;
+
+            var lists = await _todoListService.GetBriefListsAsync(userId, page, pageSize);
+            return Ok(lists);
+        }
     }
 }

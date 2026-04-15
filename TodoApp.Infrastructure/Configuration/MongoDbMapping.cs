@@ -13,21 +13,17 @@ namespace TodoApp.Infrastructure.Configuration {
             BsonClassMap.RegisterClassMap<TodoList>(cm => {
                 // Явно связывает свойство Id с системным полем _id в BSON-документе.
                 // Предотвращает дублирование идентификаторов при сохранении сущности.
-                cm.MapIdField(c => c.Id)
-                    .SetSerializer(new GuidSerializer(GuidRepresentation.Standard));
+                cm.MapIdField(c => c.Id);
 
                 // Публичные свойства с приватными сеттерами
                 cm.MapProperty(c => c.Title);
-                cm.MapProperty(c => c.OwnerId)
-                    .SetSerializer(new GuidSerializer(GuidRepresentation.Standard));
+                cm.MapProperty(c => c.OwnerId);
                 cm.MapProperty(c => c.CreatedAt);
 
                 // Позволяет драйверу записать данные в _sharedUserIds,
                 //   не смотря на то, что это IReadOnlyCollection (не поддерживает запись).
                 cm.MapField("_sharedUserIds")       // Доступ к полю через рефлексию
-                  .SetElementName("SharedUserIds")  // Имя ключа в BSON документе (в БД)
-                .SetSerializer(new EnumerableInterfaceImplementerSerializer<List<Guid>, Guid>(
-                     new GuidSerializer(GuidRepresentation.Standard)));// Добавляем сериализатор для GUID элементов коллекции
+                  .SetElementName("SharedUserIds");  // Имя ключа в BSON документе (в БД)
 
                 // Регистрирует конструктора для десериализации
                 // Ищем конструктор с 5 параметрами (id, title, ownerId, createdAt, sharedUserIds)

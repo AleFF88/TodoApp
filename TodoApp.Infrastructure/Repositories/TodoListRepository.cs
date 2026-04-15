@@ -30,7 +30,7 @@ namespace TodoApp.Infrastructure.Repositories {
         public async Task<IEnumerable<TodoList>> GetPagedAsync(Guid userId, int pageNumber, int pageSize) {
             var filter = Builders<TodoList>.Filter.Or(
                 Builders<TodoList>.Filter.Eq(l => l.OwnerId, userId),
-                Builders<TodoList>.Filter.AnyEq(l => l.SharedUserIds, userId)
+                Builders<TodoList>.Filter.AnyEq("SharedUserIds", userId)
             );
 
             return await _collection.Find(filter)

@@ -8,6 +8,10 @@ namespace TodoApp.Api {
     public class Program {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
+            // Глобальная настройка обработки Guid для всей системы
+            MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(
+                new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
+
             MongoDbMapping.Register();
 
             // Получение настроек из секции MongoDbSettings в appsettings.json
