@@ -36,6 +36,10 @@ namespace TodoApp.Infrastructure.Configuration {
                 var ctor = typeof(TodoList).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)
                     .FirstOrDefault(c => c.GetParameters().Length == 5);
 
+                if (ctor == null) {
+                    throw new InvalidOperationException($"Private constructor with 5 parameters not found for {nameof(TodoList)}.");
+                }
+
                 // Регистрирует специальный конструктор
                 //   и устанавливает связь параметров конструктора с полями BSON-документа.
                 cm.MapConstructor(ctor, "Id", "Title", "OwnerId", "CreatedAt", "_sharedUserIds");
