@@ -15,5 +15,10 @@
     <ProjectReference Include="..\TodoApp.Application\TodoApp.Application.csproj" />
     <ProjectReference Include="..\TodoApp.Infrastructure\TodoApp.Infrastructure.csproj" />
   </ItemGroup>
+  
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
 
 </Project>

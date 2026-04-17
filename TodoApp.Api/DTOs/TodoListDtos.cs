@@ -1,29 +1,55 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace TodoApp.Api.DTOs {
-    
-    // То, что приходит от клиента при создании
+
+    /// <summary>
+    /// Data required to create a new todo list.
+    /// </summary>
     public class CreateTodoListRequest {
+        /// <summary>
+        /// The title of the todo list. Must be between 1 and 255 characters.
+        /// </summary>
+        /// <example>My Private Tasks</example>
         [Required]
         [StringLength(255, MinimumLength = 1)]
         public string Title { get; set; } = string.Empty;
     }
 
-    // То, что приходит при обновлении
+    /// <summary>
+    /// Data required to update an existing todo list's information.
+    /// </summary>
     public class UpdateTodoListRequest {
+        /// <summary>
+        /// The new title for the todo list. Must be between 1 and 255 characters.
+        /// </summary>
+        /// <example>Updated Project Title</example>
         [Required]
         [StringLength(255, MinimumLength = 1)]
         public string Title { get; set; } = string.Empty;
     }
 
-    // То, что мы отдаем клиенту (согласно ТЗ: только ID и название)
+    /// <summary>
+    /// Representative data of a todo list returned to the client.
+    /// </summary>
     public class TodoListResponse {
+        /// <summary>
+        /// The unique identifier of the todo list.
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// The display title of the todo list.
+        /// </summary>
         public string Title { get; set; } = string.Empty;
     }
 
-    // Для добавления связи
+    /// <summary>
+    /// Data required to share a todo list with another user.
+    /// </summary>
     public class ShareListRequest {
+        /// <summary>
+        /// The unique identifier of the user to whom access will be granted.
+        /// </summary>
         [Required]
         public Guid TargetUserId { get; set; }
     }

@@ -26,7 +26,14 @@ namespace TodoApp.Api {
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c => {
+                // Генерируем имя файла документации на основе имени проекта
+                var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                // Формируем полный путь к этому файлу в директории приложения
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+                // Указываем Swagger использовать этот XML-файл для отображения описаний
+                c.IncludeXmlComments(xmlPath);
+            });
 
             var app = builder.Build();
             // Подключение обработчика исключений 

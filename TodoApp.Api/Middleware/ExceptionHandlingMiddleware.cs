@@ -47,7 +47,6 @@ namespace TodoApp.Api.Middleware {
             }
 
             var result = JsonSerializer.Serialize(new { errorMsg = message });
-            //var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
 

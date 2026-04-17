@@ -13,6 +13,9 @@ namespace TodoApp.Api.Controllers {
             _todoListService = todoListService;
         }
 
+        /// <summary>
+        /// Creates a new todo list for the specified owner.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromBody] CreateTodoListRequest request,
@@ -24,6 +27,9 @@ namespace TodoApp.Api.Controllers {
             return Ok(listId);
         }
 
+        /// <summary>
+        /// Retrieves a specific todo list by its identifier.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoListBriefDto>> GetById(
             Guid id,
@@ -37,6 +43,9 @@ namespace TodoApp.Api.Controllers {
             return Ok(new TodoListBriefDto(todoList.Id, todoList.Title));
         }
 
+        /// <summary>
+        /// Updates the title of an existing todo list.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(
             Guid id,
@@ -50,6 +59,9 @@ namespace TodoApp.Api.Controllers {
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a specific todo list. Only the owner can perform this action.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(
             Guid id,
@@ -61,6 +73,9 @@ namespace TodoApp.Api.Controllers {
             return NoContent();
         }
 
+        /// <summary>
+        /// Shares a todo list with another user.
+        /// </summary>
         [HttpPost("{id}/shares")]
         public async Task<IActionResult> AddShare(
             Guid id,
@@ -70,6 +85,9 @@ namespace TodoApp.Api.Controllers {
             return NoContent();
         }
 
+        /// <summary>
+        /// Retrieves a list of user IDs who have access to the specified todo list.
+        /// </summary>
         [HttpGet("{id}/shares")]
         public async Task<ActionResult<IEnumerable<Guid>>> GetShares(
             Guid id,
@@ -78,6 +96,9 @@ namespace TodoApp.Api.Controllers {
             return Ok(sharedUsers);
         }
 
+        /// <summary>
+        /// Removes a specific user's access from the todo list.
+        /// </summary>
         [HttpDelete("{id}/shares/{targetUserId}")]
         public async Task<IActionResult> RemoveShare(
             Guid id,
@@ -87,6 +108,9 @@ namespace TodoApp.Api.Controllers {
             return NoContent();
         }
 
+        /// <summary>
+        /// Retrieves a paged list of todo lists available to the user.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoListBriefDto>>> GetPaged(
             [FromQuery] int page = 1,
