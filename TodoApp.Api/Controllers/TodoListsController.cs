@@ -37,10 +37,8 @@ namespace TodoApp.Api.Controllers {
 
             // Вызываем сервис бизнес-логики. 
             // Если доступа нет или списка нет — он выбросит исключение.
-            var todoList = await _todoListService.GetListByIdAsync(id, userId);
-
-            // Маппим доменную сущность в ваш существующий TodoListBriefDto
-            return Ok(new TodoListBriefDto(todoList.Id, todoList.Title));
+            var todoListDto = await _todoListService.GetListByIdAsync(id, userId);
+            return Ok(todoListDto);
         }
 
         /// <summary>

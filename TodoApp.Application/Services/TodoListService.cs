@@ -53,9 +53,11 @@ namespace TodoApp.Application.Services {
         }
 
 
-        // Получение конкретного списка по ID 
-        public async Task<TodoList> GetListByIdAsync(Guid listId, Guid currentUserId) {
-            return await EnsureAccessAsync(listId, currentUserId);
+        // Получение конкретного списка по ID
+        public async Task<TodoListBriefDto> GetListByIdAsync(Guid listId, Guid currentUserId) {
+            var todoList = await EnsureAccessAsync(listId, currentUserId);
+            // Делаем маппинг из доменной сущности в DTO для передачи клиенту.
+            return new TodoListBriefDto(todoList.Id, todoList.Title); 
         }
 
         // Добавление связи пользователя с списком (для совместного доступа)
