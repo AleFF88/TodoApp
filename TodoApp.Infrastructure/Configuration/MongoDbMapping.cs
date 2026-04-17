@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
+﻿using MongoDB.Bson.Serialization;
 using System.Reflection;
 using TodoApp.Domain.Entities;
 

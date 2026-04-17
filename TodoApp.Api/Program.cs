@@ -1,3 +1,4 @@
+using TodoApp.Api.Middleware;
 using TodoApp.Application.Services;
 using TodoApp.Domain.Repositories;
 using TodoApp.Infrastructure;
@@ -28,6 +29,8 @@ namespace TodoApp.Api {
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            // Подключение обработчика исключений 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             // Настройка конвейера обработки запросов (Middleware Pipeline)
             if (app.Environment.IsDevelopment()) {
