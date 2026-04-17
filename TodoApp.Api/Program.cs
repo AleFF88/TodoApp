@@ -1,4 +1,6 @@
+using Swashbuckle.AspNetCore.SwaggerGen;
 using TodoApp.Api.Middleware;
+using TodoApp.Application.DTOs;
 using TodoApp.Application.Services;
 using TodoApp.Domain.Repositories;
 using TodoApp.Infrastructure;
@@ -26,13 +28,10 @@ namespace TodoApp.Api {
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c => {
-                // Генерируем имя файла документации на основе имени проекта
-                var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                // Формируем полный путь к этому файлу в директории приложения
-                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
-                // Указываем Swagger использовать этот XML-файл для отображения описаний
-                c.IncludeXmlComments(xmlPath);
+            builder.Services.AddSwaggerGen(options => {
+                // Вызываем метод чтения документации для нужных проектов
+                ConfigureXmlComments(options, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name!);
+                ConfigureXmlComments(options, typeof(TodoListBriefDto).Assembly.GetName().Name!);
             });
 
             var app = builder.Build();
@@ -48,6 +47,15 @@ namespace TodoApp.Api {
             app.UseHttpsRedirection();
             app.MapControllers();
             app.Run();
+        }
+
+        private static void ConfigureXmlComments(SwaggerGenOptions options, string assemblyName) {
+            var xmlFile = $"{assemblyName}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+            if (File.Exists(xmlPath)) {
+                options.IncludeXmlComments(xmlPath);
+            }
         }
     }
 }
