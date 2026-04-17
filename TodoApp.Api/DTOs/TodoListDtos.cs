@@ -29,21 +29,6 @@ namespace TodoApp.Api.DTOs {
     }
 
     /// <summary>
-    /// Representative data of a todo list returned to the client.
-    /// </summary>
-    public class TodoListResponse {
-        /// <summary>
-        /// The unique identifier of the todo list.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// The display title of the todo list.
-        /// </summary>
-        public string Title { get; set; } = string.Empty;
-    }
-
-    /// <summary>
     /// Data required to share a todo list with another user.
     /// </summary>
     public class ShareListRequest {
